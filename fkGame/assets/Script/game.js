@@ -16,6 +16,10 @@ cc.Class({
         bj: cc.Node,
         item: cc.Node,
         countDown: cc.Node,
+        allBtns: {
+            default: [],
+            type: cc.Button
+        },
         sps: {
             default: [],
             type: cc.SpriteFrame
@@ -25,6 +29,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
+        var self = this;
         this.fk_w = 66;
         this.size_w = 10;
         this.size_h = 20;
@@ -35,9 +40,80 @@ cc.Class({
         this.currTime = 0;
         this.moveTime = 1;
         this.gameStatus = 0;
+        this.btnIndex = -1;
         this.beginCountDown();
+
+        // this.allBtns.node.on(cc.Node.EventType.TOUCH_MOVE, function () {
+
+        // })
+        this.allBtns.forEach(function (v, i) {
+            v.index = i;
+            self.bindBtn(v, function (index, type) {
+                self.onClickBtn(index, type);
+            });
+        });
     },
 
+    bindBtn: function (btn, cb) {
+        btn.node.on(cc.Node.EventType.TOUCH_START, function () {
+            cb(btn.index, cc.Node.EventType.TOUCH_START);
+        })
+        btn.node.on(cc.Node.EventType.TOUCH_MOVE, function () {
+            cb(btn.index, cc.Node.EventType.TOUCH_MOVE);
+        })
+        btn.node.on(cc.Node.EventType.TOUCH_CANCEL, function () {
+            cb(btn.index, cc.Node.EventType.TOUCH_CANCEL);
+        })
+        btn.node.on(cc.Node.EventType.TOUCH_END, function () {
+            cb(btn.index, cc.Node.EventType.TOUCH_END);
+        })
+    },
+
+    onClickBtn: function (index, type) {
+        console.log("onClickBtn  is " + index + " " + type);
+        var self = this;
+        switch (index) {
+            case 0:
+                if (type == cc.Node.EventType.TOUCH_START) {
+                    self.onClickLeft();
+                    this.btnIndex = 0;
+                    this.allBtns[0].unscheduleAllCallbacks();
+                    this.allBtns[0].schedule(function () {
+                        self.onClickLeft();
+                    }, this.moveTime)
+                }
+                break;
+            case 1:
+                if (type == cc.Node.EventType.TOUCH_START) {
+                    this.onClickRight();
+                    this.btnIndex = 1;
+                    this.allBtns[0].unscheduleAllCallbacks();
+                    this.allBtns[0].schedule(function () {
+                        self.onClickRight();
+                    }, this.moveTime)
+                }
+                break;
+            case 2:
+                if (type == cc.Node.EventType.TOUCH_START) {
+                    this.onClickDwon();
+                    this.btnIndex = 2;
+                    this.allBtns[0].unscheduleAllCallbacks();
+                    this.allBtns[0].schedule(function () {
+                        self.onClickDwon();
+                    }, this.moveTime)
+                }
+                break;
+            case 3:
+                if (type == cc.Node.EventType.TOUCH_START) {
+                    this.onClickChange();
+                }
+                break;
+        }
+        if (type == cc.Node.EventType.TOUCH_END && index == this.btnIndex) {
+            this.allBtns[0].unscheduleAllCallbacks();
+            this.btnIndex = -1;
+        }
+    },
     // start: function () {
 
     // },
@@ -162,7 +238,6 @@ cc.Class({
     checkIsMove: function (isDown, count) {
         for (var i = 0; i < this.currFk.items.length; i++) {
             var info = this.currFk.items[i].info;
-            // cc.log("info = ", info);
             if (isDown) {
                 var y = info.y + count;
                 if (y < 0 || this.maps[y * this.size_w + info.x]) {
@@ -187,14 +262,11 @@ cc.Class({
                 this.currFk.items[i].x += this.fk_w * count;
                 this.currFk.items[i].info.x += count;
             }
-            console.log("pos x= " + i + " " + this.currFk.items[i].info.x + " " + this.currFk.items[i].info.y);
         }
-        console.log("---------------------------------------------");
     },
     fkChange: function () {
         for (var i = 0; i < this.currFk.items.length; i++) {
             var info = this.currFk.items[i].info;
-            console.log("fkChange " + info.y + " " + info.x);
             this.maps[info.y * this.size_w + info.x] = this.currFk.items[i];
         }
         var self = this;
@@ -221,7 +293,6 @@ cc.Class({
         cb();
     },
     checkScore: function (indexs, y) {
-        console.log("y = " + y);
         for (var i = 0; i < indexs.length; i++) {
             if (indexs[i] == y) {
                 return false;
@@ -230,7 +301,6 @@ cc.Class({
         indexs.push(y);
         for (var i = 0; i < this.size_w; i++) {
             if (!this.maps[y * this.size_w + i]) {
-                console.log("pos = " + (y * this.size_w + i) + " " + this.maps[y * this.size_w + i]);
                 return false;
             }
         }
