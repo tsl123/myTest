@@ -44,7 +44,7 @@ cc.Class({
     //33, 693    7, -5  495,363
     createFk: function () {
         var fk = {};
-        fk.type = Math.ceil(Math.random() * 4);
+        fk.type = 0;//Math.floor(Math.random() * 4);
         fk.state = 0;
         fk.items = [];
         for (var i = 0; i < 4; i++) {
@@ -57,7 +57,7 @@ cc.Class({
         var node = cc.instantiate(this.item);
         node.info = {};
         node.info.x = this.size_w / 2;
-        node.info.y = this.size_h = 20;
+        node.info.y = this.size_h;
         node.parent = this.bj;
         node.setPosition(pos[0], pos[1]);
         return node;
@@ -78,7 +78,7 @@ cc.Class({
                 fk.items[1].info.y += 1;
 
                 fk.items[2].x -= this.fk_w;
-                fk.items[2].info.X -= 1;
+                fk.items[2].info.x -= 1;
                 break;
             case 1:
                 // ■
@@ -187,12 +187,14 @@ cc.Class({
                 this.currFk.items[i].x += this.fk_w * count;
                 this.currFk.items[i].info.x += count;
             }
-
+            console.log("pos x= " + i + " " + this.currFk.items[i].info.x + " " + this.currFk.items[i].info.y);
         }
+        console.log("---------------------------------------------");
     },
     fkChange: function () {
         for (var i = 0; i < this.currFk.items.length; i++) {
             var info = this.currFk.items[i].info;
+            console.log("fkChange " + info.y + " " + info.x);
             this.maps[info.y * this.size_w + info.x] = this.currFk.items[i];
         }
         var self = this;
@@ -219,6 +221,7 @@ cc.Class({
         cb();
     },
     checkScore: function (indexs, y) {
+        console.log("y = " + y);
         for (var i = 0; i < indexs.length; i++) {
             if (indexs[i] == y) {
                 return false;
@@ -227,6 +230,7 @@ cc.Class({
         indexs.push(y);
         for (var i = 0; i < this.size_w; i++) {
             if (!this.maps[y * this.size_w + i]) {
+                console.log("pos = " + (y * this.size_w + i) + " " + this.maps[y * this.size_w + i]);
                 return false;
             }
         }
