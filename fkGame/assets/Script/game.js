@@ -77,30 +77,36 @@ cc.Class({
                 if (type == cc.Node.EventType.TOUCH_START) {
                     self.onClickLeft();
                     this.btnIndex = 0;
-                    this.allBtns[0].unscheduleAllCallbacks();
-                    this.allBtns[0].schedule(function () {
-                        self.onClickLeft();
-                    }, this.moveTime)
+                    this.moveDelyTime = this.moveTime / 2;
+                    this.delyTime = 0;
+                    // this.allBtns[0].unscheduleAllCallbacks();
+                    // this.allBtns[0].schedule(function () {
+                    //     self.onClickLeft();
+                    // }, this.moveTime / 4)
                 }
                 break;
             case 1:
                 if (type == cc.Node.EventType.TOUCH_START) {
                     this.onClickRight();
                     this.btnIndex = 1;
-                    this.allBtns[0].unscheduleAllCallbacks();
-                    this.allBtns[0].schedule(function () {
-                        self.onClickRight();
-                    }, this.moveTime)
+                    this.moveDelyTime = this.moveTime / 2;
+                    this.delyTime = 0;
+                    // this.allBtns[0].unscheduleAllCallbacks();
+                    // this.allBtns[0].schedule(function () {
+                    //     self.onClickRight();
+                    // }, this.moveTime / 4)
                 }
                 break;
             case 2:
                 if (type == cc.Node.EventType.TOUCH_START) {
                     this.onClickDwon();
                     this.btnIndex = 2;
-                    this.allBtns[0].unscheduleAllCallbacks();
-                    this.allBtns[0].schedule(function () {
-                        self.onClickDwon();
-                    }, this.moveTime)
+                    this.moveDelyTime = this.moveTime / 2;
+                    this.delyTime = 0;
+                    // this.allBtns[0].unscheduleAllCallbacks();
+                    // this.allBtns[0].schedule(function () {
+                    //     self.onClickDwon();
+                    // }, this.moveTime / 4)
                 }
                 break;
             case 3:
@@ -265,6 +271,7 @@ cc.Class({
         }
     },
     fkChange: function () {
+        this.btnIndex = -1;
         for (var i = 0; i < this.currFk.items.length; i++) {
             var info = this.currFk.items[i].info;
             this.maps[info.y * this.size_w + info.x] = this.currFk.items[i];
@@ -603,6 +610,25 @@ cc.Class({
                     }
                 } else if (this.gameStatus == 2) {
                     this.fkMove(true, -1);
+                }
+            }
+            if (this.btnIndex >= 0) {
+                this.delyTime += dt;
+                if (this.delyTime >= this.moveDelyTime) {
+                    this.delyTime = 0;
+                    this.moveDelyTime /= 2;
+                    var self = this;
+                    switch (this.btnIndex) {
+                        case 0:
+                            self.onClickLeft();
+                            break;
+                        case 1:
+                            self.onClickRight();
+                            break;
+                        case 2:
+                            self.onClickDwon();
+                            break;
+                    }
                 }
             }
         }
