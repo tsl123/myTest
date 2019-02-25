@@ -44,7 +44,7 @@ cc.Class({
     //33, 693    7, -5  495,363
     createFk: function () {
         var fk = {};
-        fk.type = 0;//Math.floor(Math.random() * 4);
+        fk.type = Math.floor(Math.random() * 4);
         fk.state = 0;
         fk.items = [];
         for (var i = 0; i < 4; i++) {
