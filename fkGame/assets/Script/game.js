@@ -16,6 +16,8 @@ cc.Class({
         bj: cc.Node,
         item: cc.Node,
         countDown: cc.Node,
+        allScoreNode: cc.Node,
+        beginBtn: cc.Node,
         allBtns: {
             default: [],
             type: cc.Button
@@ -36,7 +38,6 @@ cc.Class({
         this.maps = [];
         this.currString = 0;
         this.score.string = 0;
-        this.nextFk = this.createFk();
         this.currTime = 0;
         this.moveTime = 1;
         this.gameStatus = 0;
@@ -70,7 +71,6 @@ cc.Class({
     },
 
     onClickBtn: function (index, type) {
-        console.log("onClickBtn  is " + index + " " + type);
         var self = this;
         switch (index) {
             case 0:
@@ -232,9 +232,37 @@ cc.Class({
         this.nextFk = this.createFk();
     },
     beginCountDown: function () {
+        cc.log("beginCountDown");
+        if (this.currFk) {
+            this.currFk.items.forEach(function (v, i) {
+                if (v) {
+                    v.destroy();
+                }
+            })
+            this.currFk.items = [];
+        }
+        if (this.nextFk) {
+            this.nextFk.items.forEach(function (v, i) {
+                if (v) {
+                    v.destroy();
+                }
+            })
+            this.nextFk.items = [];
+        }
+
+        this.maps.forEach(function (v, i) {
+            if (v) {
+                v.destroy();
+                v = null;
+            }
+        })
+        this.nextFk = this.createFk();
         this.gameStatus = 1;
         this.beginTime = 3;
         this.countDown.getComponent(cc.Label).string = "游戏开始 " + this.beginTime;
+        this.countDown.active = true;
+        this.allScoreNode.active = false;
+        this.beginBtn.active = false;
     },
     fkMove: function (isDown, count) {
         if (this.checkIsMove(isDown, count)) {
@@ -271,6 +299,13 @@ cc.Class({
         }
     },
     fkChange: function () {
+        var self = this;
+        if (this.currFk.items.find(function (v) {
+            return v.info.y >= 5;//self.size_h;
+        })) {
+            this.gameOver();
+            return;
+        }
         this.btnIndex = -1;
         for (var i = 0; i < this.currFk.items.length; i++) {
             var info = this.currFk.items[i].info;
@@ -632,5 +667,14 @@ cc.Class({
                 }
             }
         }
+    },
+    gameOver: function () {
+        this.countDown.active = false;
+        this.gameStatus = 0;
+        this.delyTime = 0;
+        this.btnIndex = -1;
+        this.allScoreNode.getComponent(cc.Label).string = "总得分：\n" + this.score.string;
+        this.beginBtn.active = true;
+        this.allScoreNode.active = true;
     },
 });
