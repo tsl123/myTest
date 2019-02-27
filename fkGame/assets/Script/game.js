@@ -126,7 +126,7 @@ cc.Class({
     //33, 693    7, -5  495,363
     createFk: function () {
         var fk = {};
-        fk.type = Math.floor(Math.random() * 4);
+        fk.type = Math.floor(Math.random() * 5);
         fk.state = 0;
         fk.items = [];
         for (var i = 0; i < 4; i++) {
@@ -328,9 +328,10 @@ cc.Class({
         if (len > 0) {
             this.currString += 100 * len;
             this.score.string = this.currString;
-            for (var i = 0; i < winIndexs.length; i++) {
-                this.clearScoreLayer(winIndexs[i]);
-            }
+            this.clearScoreLayer(winIndexs);
+            // for (var i = 0; i < winIndexs.length; i++) {
+            //     this.clearScoreLayer(winIndexs[i]);
+            // }
         }
         cb();
     },
@@ -348,16 +349,26 @@ cc.Class({
         }
         return true;
     },
-    clearScoreLayer: function (y) {
-        for (var i = 0; i < this.size_w; i++) {
-            this.maps[y * this.size_w + i].destroy();
-            this.maps[y * this.size_w + i] = null;
+    clearScoreLayer: function (winIndexs) {
+        if (winIndexs.length <= 0) {
+            return;
         }
+        var self = this;
+        var y = -1;
+        winIndexs.forEach(function (v) {
+            for (var i = 0; i < self.size_w; i++) {
+                self.maps[v * self.size_w + i].destroy();
+                self.maps[v * self.size_w + i] = null;
+            }
+            if (v > y) {
+                y = v;
+            }
+        })
         for (var i = (y + 1) * this.size_w; i < this.size_w * this.size_h; i++) {
             if (this.maps[i]) {
-                this.maps[i - 10] = this.maps[i];
+                this.maps[i - 10 * winIndexs.length] = this.maps[i];
                 this.maps[i] = null;
-                this.maps[i - 10].y -= this.fk_w;
+                this.maps[i - 10 * winIndexs.length].y -= this.fk_w * winIndexs.length;
             }
         }
     },
