@@ -301,7 +301,7 @@ cc.Class({
     fkChange: function () {
         var self = this;
         if (this.currFk.items.find(function (v) {
-            return v.info.y >= 5;//self.size_h;
+            return v.info.y >= self.size_h;
         })) {
             this.gameOver();
             return;
