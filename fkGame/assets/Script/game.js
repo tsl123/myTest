@@ -372,6 +372,9 @@ cc.Class({
             }
         }
     },
+    onclickbeginGame:function(){
+        this.beginCountDown();
+    },
     onClickLeft: function () {
         this.fkMove(false, -1);
     },
