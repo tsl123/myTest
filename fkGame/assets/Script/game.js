@@ -42,6 +42,7 @@ cc.Class({
         this.moveTime = 1;
         this.gameStatus = 0;
         this.btnIndex = -1;
+        this.isHengPing = true;
         this.beginCountDown();
 
         // this.allBtns.node.on(cc.Node.EventType.TOUCH_MOVE, function () {
@@ -372,7 +373,7 @@ cc.Class({
             }
         }
     },
-    onclickbeginGame:function(){
+    onclickbeginGame: function () {
         this.beginCountDown();
     },
     onClickLeft: function () {
@@ -690,5 +691,17 @@ cc.Class({
         this.allScoreNode.getComponent(cc.Label).string = "总得分：\n" + this.score.string;
         this.beginBtn.active = true;
         this.allScoreNode.active = true;
+    },
+    onClickQiePing: function () {
+        this.isHengPing = !this.isHengPing;
+        this.changeRootViewController(this.isHengPing);
+        this.isHengPing ? cc.director.loadScene("gameScene") : cc.director.loadScene("testScene");
+    },
+    changeRootViewController: function (bool) {
+        if (cc.sys.os == cc.sys.OS_IOS) {
+            return jsb.reflection.callStaticMethod('AppController', 'changeOrienttationH:', bool);
+        } else if (cc.sys.os == cc.sys.OS_ANDROID) {
+            return jsb.reflection.callStaticMethod('org.cocos2dx.javascript/AppActivity', 'changeOrientationH', '(Z)V', bool);
+        }
     },
 });
