@@ -19,17 +19,17 @@
     }
   },
   "fit-height": true,
-  "fit-width": false,
+  "fit-width": true,
   "group-list": [
     "default"
   ],
-  "last-module-event-record-time": 1558772787157,
+  "last-module-event-record-time": 1562483970764,
   "simulator-orientation": false,
   "simulator-resolution": {
     "height": 640,
     "width": 960
   },
   "start-scene": "current",
-  "use-customize-simulator": false,
+  "use-customize-simulator": true,
   "use-project-simulator-setting": false
 }

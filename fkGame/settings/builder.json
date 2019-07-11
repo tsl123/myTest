@@ -14,7 +14,7 @@
     "orientation": "portrait",
     "subContext": ""
   },
-  "encryptJs": true,
+  "encryptJs": false,
   "excludeScenes": [],
   "fb-instant-games": {},
   "includeSDKBox": false,
@@ -22,12 +22,12 @@
   "inlineSpriteFrames_native": true,
   "md5Cache": false,
   "mergeStartScene": false,
-  "optimizeHotUpdate": false,
+  "optimizeHotUpdate": true,
   "orientation": {
-    "landscapeLeft": false,
-    "landscapeRight": false,
-    "portrait": false,
-    "upsideDown": true
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": true,
+    "upsideDown": false
   },
   "packageName": "org.cocos2d.helloworld",
   "qqplay": {
@@ -35,7 +35,7 @@
     "orientation": "portrait",
     "zip": false
   },
-  "startScene": "643e2fb5-0d2f-420d-a7eb-eeb144254ff9",
+  "startScene": "5c32857a-6bfb-4313-b371-101a386517f2",
   "title": "fangkai",
   "webOrientation": "auto",
   "wechatgame": {
